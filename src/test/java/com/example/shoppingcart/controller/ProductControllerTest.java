@@ -2,8 +2,10 @@ package com.example.shoppingcart.controller;
 
 import com.example.shoppingcart.model.Product;
 import com.example.shoppingcart.repository.ProductRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
@@ -21,25 +23,35 @@ import static org.mockito.Mockito.when;
 
 public class ProductControllerTest {
 
-    private static String resourceUrl = "http://localhost:8080/api/v1/cart";
+    private static String resourceUrl = "http://localhost:8080/api/v1/product";
 
     @Mock
     ProductRepository productRepository;
 
+    @Mock
+    private List<Product> productList;
+
     @Autowired
     TestRestTemplate testRestTemplate;
 
+    @Before
+    public void setUp() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
     public void testListAll() {
-        List<Product> productlist = new ArrayList<>();
+
         Product product = new Product();
         product.setPID(3);
         product.setName("TestProduct");
         product.setDescription("A very tasty test");
         product.setPrice(3.0d);
-        productlist.add(product);
 
-        when(productRepository.findAll()).thenReturn(productlist);
+        when(productList.get(0)).thenReturn(product);
+
+        when(productRepository.findAll()).thenReturn(productList);
+
         HttpEntity<String> request = new HttpEntity("");
         ResponseEntity<List> response = testRestTemplate.exchange(resourceUrl, HttpMethod.GET, request, List.class);
 
