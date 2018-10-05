@@ -3,6 +3,7 @@ package com.example.shoppingcart.controller;
 import com.example.shoppingcart.model.Product;
 import com.example.shoppingcart.repository.ProductRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +27,8 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -34,47 +37,21 @@ public class ProductControllerTest {
 
     private static String resourceUrl = "http://localhost:8080/api/v1/product";
 
-    @Mock
-    ProductRepository productRepository;
-
-    @Mock
-    ProductController productController;
-
-    @Mock
-    private List<Product> productList;
-
     @Autowired
     TestRestTemplate testRestTemplate;
 
     @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-    }
+    public void init() { MockitoAnnotations.initMocks(this); }
 
     @Test
     public void testListAll() throws Exception {
 
-        Product product = new Product();
-        product.setPID(3);
-        product.setName("TestProduct");
-        product.setDescription("A very tasty test");
-        product.setPrice(3.0d);
-
-        /*
-        Make mock list to return with GetAll.
-         */
-
-        when(productList.get(0)).thenReturn(product);
-
-        when(productController.listAll()).thenReturn(productList);
-//        when(productController.listAll()).thenReturn(productRepository.findAll());
-
         ResponseEntity<String> response = testRestTemplate.exchange(resourceUrl, HttpMethod.GET, null, String.class);
 
-//        List<Product> resultList = new ObjectMapper().readValue(response.getBody(), new TypeReference<List<Product>>(){});
-//        assertThat(resultList.get(0).getPID(), is(3));
+        ObjectMapper mapper = new ObjectMapper();
+        List<Product> responseList = mapper.readValue(response.getBody(), new TypeReference<List<Product>>(){ });
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody(), is(notNullValue()));
+        assertNotNull(responseList.get(0).getPID());
     }
 }

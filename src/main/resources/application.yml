@@ -38,3 +38,9 @@ datasource:
     password: ''
     driver-class-name: org.h2.Driver
     validate-on-migrate: false
+
+API:
+  v1:
+    API_PREFIX: 'api/v1'
+    CART_PREFIX: '/cart'
+    PRODUCT_PREFIX: '/product'

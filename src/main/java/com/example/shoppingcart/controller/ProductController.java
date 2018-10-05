@@ -19,29 +19,14 @@ public class ProductController {
         return productRepository.findAll();
     }
 
-//    @GetMapping()
-//    public String listAll() {
-//        return "Product listAll()";
-//    }
-
 
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id){
         return productRepository.findById(id).get();
     }
 
-//    @GetMapping("/{id}")
-//    public String getProduct(@PathVariable Long id){
-//        return "Id requested: " + id;
-//    }
-
     @PostMapping()
     public Product newProduct(@RequestBody Product product) {
         return productRepository.saveAndFlush(product);
     }
-
-//    @PostMapping()
-//    public Product newProduct(@RequestBody Product product) {
-//        return product;
-//    }
 }
