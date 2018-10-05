@@ -14,8 +14,6 @@ public class CartController {
 
     @Autowired
     CartRepository cartRepository;
-    @Autowired
-    ProductRepository productRepository;
 
     @GetMapping()
     public List<CartEntry> listAll() {
