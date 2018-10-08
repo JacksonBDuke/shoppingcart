@@ -83,7 +83,8 @@ public class ProductControllerTest {
         product.setDescription(TEST_DESC);
         product.setPrice(TEST_PRICE);
 
-        when(productRepository.findById(TEST_PID).orElse(null)).thenReturn();
+        //Returning optional of a product.
+        when(productRepository.findById(TEST_PID)).thenReturn(Optional.of(product));
 
         RequestEntity<Product> request = RequestEntity
                 .post(new URI(resourceUrl))
