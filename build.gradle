@@ -2,17 +2,56 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.0.5.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.6.RELEASE'
-	id 'org.flywaydb.flyway' version '5.1.4'
+    id 'jacoco'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
-repositories {
-	mavenCentral()
+ext {
+    jacocoVersion = '0.8.1'
 }
 
+repositories {
+	mavenCentral()
+    jcenter()
+}
+
+jacoco {
+    toolVersion = jacocoVersion
+}
+
+jacocoTestReport {
+    reports {
+//        html.destination file("${buildDir}/jacocoHtml")
+        html.enabled = true;
+        xml.enabled = true
+        csv.enabled = true
+    }
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.5
+            }
+        }
+
+        rule {
+            enabled = false
+            element = 'CLASS'
+            includes = ['org.gradle.*']
+
+            limit {
+                counter = 'LINE'
+                value = 'TOTALCOUNT'
+                maximum = 0.3
+            }
+        }
+    }
+}
 
 dependencies {
 	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.4'

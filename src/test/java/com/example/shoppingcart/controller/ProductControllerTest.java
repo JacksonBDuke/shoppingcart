@@ -19,6 +19,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -31,13 +32,10 @@ import static org.mockito.Mockito.when;
 public class ProductControllerTest {
 
     private static String resourceUrl = "http://localhost:8080/api/v1/product";
-    private static final long TEST_PID = 10L;
-    private static final String TEST_NAME = "Test Banana";
-    private static final String TEST_DESC = "Test Yellow";
-    private static final double TEST_PRICE = 1111d;
-
-    private static Product product;
-    private static List<Product> productList;
+    private static  long TEST_PID = 10L;
+    private static  String TEST_NAME = "Test Banana";
+    private static  String TEST_DESC = "Test Yellow";
+    private static  double TEST_PRICE = 11.0d;
 
     @Autowired
     TestRestTemplate testRestTemplate;
@@ -71,8 +69,10 @@ public class ProductControllerTest {
         List<Product> responseList = mapper.readValue(response.getBody(), new TypeReference<List<Product>>(){ });
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        productAssertion(productList.get(0));
+        productAssertion(responseList.get(0));
     }
+
+
 
     @Test
     public void testGetProductId() throws Exception {
@@ -83,7 +83,7 @@ public class ProductControllerTest {
         product.setDescription(TEST_DESC);
         product.setPrice(TEST_PRICE);
 
-        when(productRepository.findById(mock(Long.class)).get()).thenReturn(product);
+        when(productRepository.findById(TEST_PID).orElse(null)).thenReturn();
 
         RequestEntity<Product> request = RequestEntity
                 .post(new URI(resourceUrl))
